@@ -50,24 +50,29 @@ typedef uint32_t TickType_t;
 // 無return
 #define portDISABLE_INTERRUPTS() vPortRaiseBASEPRI()
 static portFORCE_INLINE void vPortRaiseBASEPRI(void){
-	uint32_t ulNewBASEPRI = config_MAX_SYSTEMCALL_INTERRUPT_PRIORITY;
+	uint32_t ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 	__asm volatile (
-		"msr basepri, ulNewBASEPRI	\n"
-		"dsb												\n"
-		"isb												\n"
+		"msr basepri, %0 \n"    // %0 代表第一個輸入參數
+		"dsb             \n"
+		"isb             \n"
+        :                       // 沒有輸出參數
+        : "r" (ulNewBASEPRI)    // 輸入參數：將 ulNewBASEPRI 放入通用暫存器("r")
+        : "memory"              // 告訴編譯器記憶體可能被修改
 	);
 }
 
 // 有return
 #define portSET_INTERRUPT_MASK_FROM_ISR() ulPortRaiseBASEPRI()
-
 static portFORCE_INLINE uint32_t ulPortRaiseBASEPRI(void){
-	uint32_t ulReturn, ulNewBASEPRI = config_MAX_SYSTEMCALL_INTERRUPT_PRIORITY;
+	uint32_t ulReturn, ulNewBASEPRI = configMAX_SYSCALL_INTERRUPT_PRIORITY;
 	__asm volatile (
-		"msr ulReturn, basepri			\n"
-		"msr basepri, ulNewBASEPRI	\n"
-		"dsb												\n"
-		"isb												\n"
+		"mrs %0, basepri \n"    // 修正：讀取特殊暫存器要用 mrs。%0 代表 ulReturn
+		"msr basepri, %1 \n"    // %1 代表 ulNewBASEPRI
+		"dsb             \n"
+		"isb             \n"
+        : "=r" (ulReturn)       // 輸出參數："=r" 表示將結果寫入 ulReturn
+        : "r" (ulNewBASEPRI)    // 輸入參數：將 ulNewBASEPRI 傳入
+        : "memory"
 	);
 	return ulReturn;
 }
@@ -79,12 +84,18 @@ static portFORCE_INLINE uint32_t ulPortRaiseBASEPRI(void){
 #define portCLEAR_INTERRUPTS_MASK_FROM_ISR(x) vPortSetBASEPRI(x)
 static portFORCE_INLINE void vPortSetBASEPRI(uint32_t ulBASEPRI){
 	__asm volatile (
-		"msr basepri, ulBASEPRI"
+		"msr basepri, %0"
+        :                       // 沒有輸出參數
+        : "r" (ulBASEPRI)       // 輸入參數+
+        : "memory"
 	);
 }
 
 // 定義進出critical_section
 #define portENTER_CRITICAL()		vPortEnterCritical()
 #define portEXIT_CRITICAL()			vPortExitCritical()
+
+// IdleTask 移植性定義函數
+#define portTASK_FUNCTION(vFunction, pvParameters) void vFunction(void *pvParameters)
 
 #endif /* PORTMACRO_H */

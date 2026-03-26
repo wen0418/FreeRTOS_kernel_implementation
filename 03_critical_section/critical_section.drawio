@@ -1,0 +1,111 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36" version="29.6.1">
+  <diagram name="第 1 页" id="z5Mtd95ovYG6ggnLpM91">
+    <mxGraphModel dx="1678" dy="914" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-25" edge="1" parent="1" source="3CjjBHR3hFTElXPwUwXR-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="6yi_QgXnHS7Zpi5yLYoi-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-26" edge="1" parent="1" source="3CjjBHR3hFTElXPwUwXR-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="6yi_QgXnHS7Zpi5yLYoi-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3CjjBHR3hFTElXPwUwXR-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="關中斷&lt;br&gt;在 portmacro.h 定義" vertex="1">
+          <mxGeometry height="100" width="170" x="319" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-23" edge="1" parent="1" source="6yi_QgXnHS7Zpi5yLYoi-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="6yi_QgXnHS7Zpi5yLYoi-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="portDISABLE_INTERRUPTS()&lt;br&gt;( vPortRaiseBASEPRI()&amp;nbsp;)" vertex="1">
+          <mxGeometry height="50" width="330" x="529" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-24" edge="1" parent="1" source="6yi_QgXnHS7Zpi5yLYoi-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="6yi_QgXnHS7Zpi5yLYoi-15">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1059" y="235" />
+              <mxPoint x="1059" y="345" />
+            </Array>
+            <mxPoint x="1018" y="345" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="portSET_INTERRUPT_MASK_FROM_ISR()&lt;br&gt;( ulPortRaiseBASEPRI()&amp;nbsp;)" vertex="1">
+          <mxGeometry height="50" width="330" x="529" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-8" edge="1" parent="1" source="6yi_QgXnHS7Zpi5yLYoi-10" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;shape=filledEdge;endArrow=none;endFill=0;" target="6yi_QgXnHS7Zpi5yLYoi-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-9" edge="1" parent="1" source="6yi_QgXnHS7Zpi5yLYoi-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="6yi_QgXnHS7Zpi5yLYoi-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="開中斷&lt;div&gt;在 portmacro.h 定義&lt;/div&gt;" vertex="1">
+          <mxGeometry height="100" width="170" x="319" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-42" edge="1" parent="1" source="6yi_QgXnHS7Zpi5yLYoi-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="6yi_QgXnHS7Zpi5yLYoi-40">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="portENABLE_INTERRUPTS()&lt;br&gt;( vPortRaiseBASEPRI(0)&amp;nbsp;)" vertex="1">
+          <mxGeometry height="50" width="330" x="529" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-43" edge="1" parent="1" source="6yi_QgXnHS7Zpi5yLYoi-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="6yi_QgXnHS7Zpi5yLYoi-38">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1059" y="485" />
+              <mxPoint x="1059" y="595" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="portCLEAR_INTERRUPT_MASK_FROM_ISR(x)&amp;nbsp;&lt;br&gt;( vPortSetBASEPRI(x) )" vertex="1">
+          <mxGeometry height="50" width="330" x="529" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="&lt;div&gt;進入critical_section&lt;br&gt;(NO return)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="170" x="110" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-32" edge="1" parent="1" source="6yi_QgXnHS7Zpi5yLYoi-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="6yi_QgXnHS7Zpi5yLYoi-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="在task.h定義成 taskENTER_CRITICAL()" vertex="1">
+          <mxGeometry height="50" width="330" x="320" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-33" edge="1" parent="1" source="6yi_QgXnHS7Zpi5yLYoi-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="6yi_QgXnHS7Zpi5yLYoi-31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="在task.h定義成 taskENTER_CRITICAL_FROM_ISR()" vertex="1">
+          <mxGeometry height="50" width="330" x="320" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-27" edge="1" parent="1" source="6yi_QgXnHS7Zpi5yLYoi-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="6yi_QgXnHS7Zpi5yLYoi-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-19" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="portENTER_CRITICAL()&lt;div&gt;vPortEnterCritical() (在port.c定義)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="330" x="688" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-31" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="&lt;div&gt;進入critical_section&lt;br&gt;(return)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="170" x="110" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-34" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="&lt;div&gt;退出critical_section&lt;br&gt;(NO return)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="170" x="110" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-35" edge="1" parent="1" source="6yi_QgXnHS7Zpi5yLYoi-36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="6yi_QgXnHS7Zpi5yLYoi-34">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-36" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="在task.h定義成 taskEXIT_CRITICAL()" vertex="1">
+          <mxGeometry height="50" width="330" x="320" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-37" edge="1" parent="1" source="6yi_QgXnHS7Zpi5yLYoi-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="6yi_QgXnHS7Zpi5yLYoi-41">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-38" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="在task.h定義成&lt;div&gt;taskEXIT_CRITICAL_FROM_ISR(x)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="330" x="320" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-39" edge="1" parent="1" source="6yi_QgXnHS7Zpi5yLYoi-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="6yi_QgXnHS7Zpi5yLYoi-36">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-40" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="portEXIT_CRITICAL()&lt;div&gt;vPortExitCritical() (在port.c定義)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="330" x="688" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="6yi_QgXnHS7Zpi5yLYoi-41" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="&lt;div&gt;退出critical_section&lt;br&gt;(return)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="170" x="110" y="570" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
