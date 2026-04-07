@@ -12,6 +12,8 @@
 // critical_section用參數
 static UBaseType_t uxCriticalNesting = 0xaaaaaaaa;
 
+// xTickCount全域變數宣告
+TickType_t xTickCount;
 
 // 組語內容函數宣告
 void prvStartFirstTask(void) __attribute__((naked));
@@ -132,4 +134,32 @@ void vPortExitCritical(void){
 	if(uxCriticalNesting == 0){
 		portENABLE_INTERRUPTS();
 	}
+}
+
+void xTaskIncrementTick(void){
+	TCB_t *pxTCB = NULL;
+	BaseType_t i = 0;
+	
+	// 更新系統計時器 xTickCount
+	const TickType_t xConstTickCount = xTickCount + 1;
+	xTickCount = xConstTickCount;
+	
+	// 掃描就緒列表中所有任務的xTickToDelay，如果不為0，則-1
+	for(i=0;i<configMAX_PRIORITIES;i++){
+		pxTCB = (TCB_t*)listGET_HEAD_ENTRY((&pxReadyTasksLists[i]));
+		if(pxTCB->xTicksToDelay > 0){
+			pxTCB->xTicksToDelay--;
+		}
+	}
+	portYIELD();
+}
+
+// 定義systick handler
+void xPortSysTickHandler(void){
+	// 先關中斷
+	vPortRaiseBASEPRI();
+	
+	xTaskIncrementTick();
+	
+	vPortSetBASEPRI(0);
 }
