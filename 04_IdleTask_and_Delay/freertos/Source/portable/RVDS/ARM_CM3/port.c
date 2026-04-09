@@ -9,11 +9,24 @@
 #define portNVIC_PENDSV_PRI 					(((uint32_t) configKERNEL_INTERRUPT_PRIORITY) << 16UL)
 #define portNVIC_SYSTICK_PRI 					(((uint32_t) configKERNEL_INTERRUPT_PRIORITY) << 24UL)
 
+/* Systick 控制 register */
+#define portNVIC_SYSTICK_CTRL_REG    	(*((volatile uint32_t *) 0xe000e010))
+/* Systick 載入 register */
+#define portNVIC_SYSTICK_LOAD_REG    	(*((volatile uint32_t *) 0xe000e014))
+	
+/* Systick clock源選擇 */
+#ifndef configSYSTICK_CLOCK_HZ
+	#define configSYSTICK_CLOCK_HZ configCPU_CLOCK_HZ
+	#define portNVIC_SYSTICK_CLK_BIT ( 1UL << 2UL )
+#else
+	#define portNVIC_SYSTICK_CLK_BIT (0)
+#endif
+
+#define portNVIC_SYSTICK_INT_BIT			( 1UL << 1UL )
+#define portNVIC_SYSTICK_ENABLE_BIT		( 1UL << 0UL )
+
 // critical_section用參數
 static UBaseType_t uxCriticalNesting = 0xaaaaaaaa;
-
-// xTickCount全域變數宣告
-TickType_t xTickCount;
 
 // 組語內容函數宣告
 void prvStartFirstTask(void) __attribute__((naked));
@@ -45,10 +58,17 @@ StackType_t *pxPortInitialiseStack(StackType_t* pxTopOfStack,
 	return pxTopOfStack;
 }
 
+void vPortSetupTimerInterrupt(void){
+	portNVIC_SYSTICK_LOAD_REG = (configSYSTICK_CLOCK_HZ / configTICK_RATE_HZ) - 1UL;
+	portNVIC_SYSTICK_CTRL_REG = (portNVIC_SYSTICK_CLK_BIT | portNVIC_SYSTICK_INT_BIT | portNVIC_SYSTICK_ENABLE_BIT);
+}
+
 BaseType_t xPortStartScheduler(void){
 	// 配置pendSV和SYSTICK的中斷優先級為最低
 	portNVIC_SYSPRI2_REG |= portNVIC_PENDSV_PRI;
 	portNVIC_SYSPRI2_REG |= portNVIC_SYSTICK_PRI;
+	
+	vPortSetupTimerInterrupt();
 	
 	prvStartFirstTask();
 	
@@ -134,24 +154,6 @@ void vPortExitCritical(void){
 	if(uxCriticalNesting == 0){
 		portENABLE_INTERRUPTS();
 	}
-}
-
-void xTaskIncrementTick(void){
-	TCB_t *pxTCB = NULL;
-	BaseType_t i = 0;
-	
-	// 更新系統計時器 xTickCount
-	const TickType_t xConstTickCount = xTickCount + 1;
-	xTickCount = xConstTickCount;
-	
-	// 掃描就緒列表中所有任務的xTickToDelay，如果不為0，則-1
-	for(i=0;i<configMAX_PRIORITIES;i++){
-		pxTCB = (TCB_t*)listGET_HEAD_ENTRY((&pxReadyTasksLists[i]));
-		if(pxTCB->xTicksToDelay > 0){
-			pxTCB->xTicksToDelay--;
-		}
-	}
-	portYIELD();
 }
 
 // 定義systick handler

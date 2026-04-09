@@ -8,6 +8,8 @@ List_t pxReadyTaskLists[configMAX_PRIORITIES];
 
 // 初始化 IdleTaskHandler
 static TaskHandle_t xIdleTaskHandle = NULL;
+// xTickCount全域變數宣告
+TickType_t xTickCount;
 
 static void prvInitialiseNewTask(TaskFunction_t pxTaskCode,
 																 const char * const pcName,
@@ -102,6 +104,15 @@ void vApplicationGetIdleTaskMemory(TCB_t **ppxIdleTaskTCBBuffer,
 															StackType_t **ppxIdleTaskStackBuffer,
 															uint32_t *pulIdleTaskStackSize);
 
+/* 定義 idle task */
+static portTASK_FUNCTION(prvIdleTask, pvParameter){
+	(void) pvParameter;
+	
+	for(;;){
+		/* idle task 目前什麼都不用做 */
+	}
+}
+
 void vTaskStartScheduler(void){
 	
 	/* ==== 創建 IdleTask start ==== */
@@ -179,4 +190,24 @@ void vTaskDelay(const TickType_t xTicksToDelay){
 	pxTCB->xTicksToDelay = xTicksToDelay;
 	/* 任務切換 */
 	taskYIELD();
+}
+
+void xTaskIncrementTick(void){
+	TCB_t *pxTCB = NULL;
+	BaseType_t i = 0;
+	
+	// 更新系統計時器 xTickCount
+	const TickType_t xConstTickCount = xTickCount + 1;
+	xTickCount = xConstTickCount;
+	
+	// 掃描就緒列表中所有任務的xTickToDelay，如果不為0，則-1
+	for(i=0; i<configMAX_PRIORITIES; i++){
+        if( listLIST_IS_EMPTY( &(pxReadyTaskLists[i]) ) == pdFALSE ){
+            pxTCB = (TCB_t*)(listGET_HEAD_ENTRY((&pxReadyTaskLists[i]))->pvOwner);
+            if(pxTCB->xTicksToDelay > 0){
+                pxTCB->xTicksToDelay--;
+            }
+        }
+    }
+	portYIELD();
 }

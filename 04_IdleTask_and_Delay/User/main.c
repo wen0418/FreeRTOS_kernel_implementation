@@ -35,7 +35,6 @@ StackType_t Task2Stack[TASK2_STACK_SIZE];
 TCB_t Task2TCB;
 
 /* 定義 IdleTask 的 Stack */
-TaskHandle_t Task2Handle;
 #define configMINIMAL_STACK_SIZE 	((unsigned) 128)
 StackType_t IdleTaskStack[configMINIMAL_STACK_SIZE];
 /* 定義 IdleTask 的 TCB ( 是一個全域變數 ) */
@@ -92,29 +91,43 @@ void delay(volatile uint32_t count){
 
 void Task1_Entry(void* arg){
 	for(;;){
+#if 0
 		flag1 = 1;
 		delay(1000);
 		flag1 = 0;
 		delay(1000);
-		
 		/* 自己呼叫taskYIELD，手動切換任務 */
 		taskYIELD();
+#else
+		flag1 = 1;
+		vTaskDelay(2);
+		flag1 = 0;
+		vTaskDelay(2);
+#endif
+		
+		
 	}
 }
 	
 void Task2_Entry(void* arg){
 	for(;;){
+#if 0
 		flag2 = 1;
 		delay(1000);
 		flag2 = 0;
 		delay(1000);
-		
 		/* 自己呼叫taskYIELD，手動切換任務 */
 		taskYIELD();
+#else
+		flag2 = 1;
+		vTaskDelay(2);
+		flag2 = 0;
+		vTaskDelay(2);
+#endif
 	}
 }
 
-/*
+
 void vApplicationGetIdleTaskMemory(TCB_t **ppxIdleTaskTCBBuffer,
 																	 StackType_t **ppxIdleTaskStackBuffer,
 																	 uint32_t *pulIdleTaskStackSize)
@@ -123,4 +136,3 @@ void vApplicationGetIdleTaskMemory(TCB_t **ppxIdleTaskTCBBuffer,
 	*ppxIdleTaskStackBuffer = IdleTaskStack; // array 本身就是特殊指標 不需要再加&
 	*pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;
 }
-*/

@@ -33,18 +33,18 @@ typedef uint32_t TickType_t;
 
 #define portSY_FULL_READ_WRITE		( 15 )
 
-// critical用define
-#define portINLINE __inline
-#ifndef portFORCE_INLINE
-#define portFORCE_INLINE __attribute__((always_inline)) inline
-#endif
-
 #define portYIELD(){                                                                \
     /* 觸發 PendSV，產生上下文切換 */                                               \
   portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT;                                 \
 	__asm volatile ( "dsb" ::: "memory" );                                          \
 	__asm volatile ( "isb" );                                                       \
 }
+
+// critical用define
+#define portINLINE __inline
+#ifndef portFORCE_INLINE
+#define portFORCE_INLINE __attribute__((always_inline)) inline
+#endif
 
 // 定義中斷相關函數(關中斷)
 // 無return

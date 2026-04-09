@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36">
   <diagram name="第 1 页" id="cC6xOJjczvaN6AkWrLGU">
-    <mxGraphModel dx="1783" dy="971" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1501" dy="818" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -196,16 +196,19 @@
         <mxCell id="KlPdgnjSA4dGU4RZJ8CR-70" edge="1" parent="1" source="KlPdgnjSA4dGU4RZJ8CR-69" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="KlPdgnjSA4dGU4RZJ8CR-69">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="KlPdgnjSA4dGU4RZJ8CR-91" edge="1" parent="1" source="KlPdgnjSA4dGU4RZJ8CR-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="KlPdgnjSA4dGU4RZJ8CR-72">
+        <mxCell id="DeGiPqu3m2gM2SoHwnsO-2" edge="1" parent="1" source="KlPdgnjSA4dGU4RZJ8CR-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="DeGiPqu3m2gM2SoHwnsO-1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="DeGiPqu3m2gM2SoHwnsO-2" edge="1" parent="1" source="KlPdgnjSA4dGU4RZJ8CR-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="DeGiPqu3m2gM2SoHwnsO-1">
+        <mxCell id="DeGiPqu3m2gM2SoHwnsO-7" edge="1" parent="1" source="KlPdgnjSA4dGU4RZJ8CR-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="KlPdgnjSA4dGU4RZJ8CR-72">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="KlPdgnjSA4dGU4RZJ8CR-71" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="xPortPendSVHandler()" vertex="1">
           <mxGeometry height="52.5" width="170" x="792" y="1687" as="geometry" />
         </mxCell>
         <mxCell id="DeGiPqu3m2gM2SoHwnsO-4" edge="1" parent="1" source="KlPdgnjSA4dGU4RZJ8CR-72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="DeGiPqu3m2gM2SoHwnsO-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DeGiPqu3m2gM2SoHwnsO-8" edge="1" parent="1" source="KlPdgnjSA4dGU4RZJ8CR-72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="KlPdgnjSA4dGU4RZJ8CR-71">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="KlPdgnjSA4dGU4RZJ8CR-72" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="vTaskSwitchContext()" vertex="1">
@@ -236,11 +239,11 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="DeGiPqu3m2gM2SoHwnsO-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="&amp;nbsp;主要做三件事：&lt;div&gt;1. 儲存目前task的CPU狀態，並更新TopOfStask等stack資訊&lt;/div&gt;&lt;div&gt;2. 呼叫switchcontext獲得新的pxCurrentTask&lt;/div&gt;&lt;div&gt;3. 將新任務狀態load入CPU中&lt;/div&gt;" vertex="1">
-          <mxGeometry height="130" width="250" x="752" y="1747" as="geometry" />
+        <mxCell id="DeGiPqu3m2gM2SoHwnsO-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;arcSize=11;" value="&amp;nbsp;主要做三件事：&lt;div&gt;1. 儲存目前task的CPU狀態，並更新TopOfStask等stack資訊&lt;/div&gt;&lt;div&gt;2. 呼叫switchcontext獲得新的pxCurrentTask&lt;/div&gt;&lt;div&gt;3. 將新任務狀態load入CPU中&lt;/div&gt;" vertex="1">
+          <mxGeometry height="130" width="250" x="752" y="1756" as="geometry" />
         </mxCell>
         <mxCell id="DeGiPqu3m2gM2SoHwnsO-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="利用readylist找出目前優先級最高之任務" vertex="1">
-          <mxGeometry height="50" width="170" x="1032" y="1757" as="geometry" />
+          <mxGeometry height="50" width="188" x="1023" y="1756" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

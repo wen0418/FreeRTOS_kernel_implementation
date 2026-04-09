@@ -21,6 +21,8 @@ TaskHandle_t xTaskCreateStatic(	TaskFunction_t pxTaskCode,
 void prvInitialiseTaskLists();
 void vTaskStartScheduler( void );
 void vTaskSwitchContext( void );
+void xTaskIncrementTick( void );
+void vTaskDelay(const TickType_t xTicksToDelay);
 
 // 進入與退出critical section之定義
 #define taskENTER_CRITICAL() 					portENTER_CRITICAL()
