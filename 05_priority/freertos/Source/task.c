@@ -4,17 +4,21 @@
 // 初始化 CurrentTCB
 TCB_t* volatile pxCurrentTCB = NULL;
 // 任務就緒列表
-List_t pxReadyTaskLists[configMAX_PRIORITIES];
+List_t pxReadyTasksLists[configMAX_PRIORITIES];
 
 // 初始化 IdleTaskHandler
 static TaskHandle_t xIdleTaskHandle = NULL;
 // xTickCount全域變數宣告
 TickType_t xTickCount;
 
+// 初始化任務數
+static UBaseType_t uxCurrentNumberOfTasks = 0;
+
 static void prvInitialiseNewTask(TaskFunction_t pxTaskCode,
 																 const char * const pcName,
 																 const uint32_t ulStackDepth,
 																 void * const pvParameters,
+																 UBaseType_t uxPriority,
 																 TaskHandle_t * const pxCreatedTask,
 																 TCB_t *pxNewTCB );
 																 
@@ -24,6 +28,7 @@ TaskHandle_t xTaskCreateStatic(TaskFunction_t pxTaskCode,
 															 const char* const pcName,
 															 const uint32_t ulStackDepth,
 															 void* const pvParameters,
+															 UBaseType_t uxPriority,
 															 StackType_t* const puxStackBuffer,
 															 TCB_t* const pxTaskBuffer)
 {
@@ -38,8 +43,11 @@ TaskHandle_t xTaskCreateStatic(TaskFunction_t pxTaskCode,
 												 pcName,
 												 ulStackDepth,
 												 pvParameters,
+												 uxPriority,
 												 &xReturn,
 												 pxNewTCB);
+		// 將任務放置ReadyList
+		prvAddNewTaskToReadyList(pxNewTCB);
 	}else{
 		xReturn = NULL;
 	}
@@ -47,10 +55,56 @@ TaskHandle_t xTaskCreateStatic(TaskFunction_t pxTaskCode,
 }
 #endif //configSUPPORT_STATIC_ALLOCATION
 
+/* 定義排程方式 */
+static volatile UBaseType_t uxTopReadyPriority = tskIDLE_PRIORITY;
+#if (configUSE_PORT_OPTIMISED_TASK_SELECTION == 0)
+	/* uxTopReadyPriority 存儲已就緒任務的最高優先級 */
+	#define taskRECORD_READY_PROIRITY(uxPriority){\
+	if((uxPriority) > uxTopReadyPriority){\
+	uxTopReadyPriority = uxPriority;\
+	}\
+	}/* taskRECORD_READY_PROIRITY */
+	
+	#define taskSELECT_HIGHEST_PRIORITY_TASK(){\
+	UBaseType_t uxTopPriority = uxTopReadyPriority;\
+	while(listLIST_IS_EMPTY(&(pxReadyTasksLists[uxTopPriority]))){\
+	--uxTopPriority;\
+	}\
+	listGET_OWNER_OF_NEXT_ENTRY(pxCurrentTCB, &(pxReadyTasksLists[uxTopPriority]));\
+	uxTopReadyPriority = uxTopPriority;\
+	}
+	
+	/* 以下兩個在優化方法才有用 所以定義為空 */
+	#define taskRESET_READY_PRIORITY(uxPriority)
+	#define portRESET_READY_PRIORITY(uxPriority, uxTopReadyPriority)
+	
+	/* --------------- 以上是通用方法 --------------- */
+#else
+	/* --------------- 以下是優化方法 --------------- */
+	#define taskRECORD_READY_PRIORITY(uxPriority) portRECORD_READY_PRIORITY(uxPriority, uxTopReadyPriority)
+	#define taskSELECT_HIGHEST_PRIORITY_TASK(){\
+	UBaseType_t uxTopPriority;\
+	portGET_HIGHEST_PRIORITY(uxTopPriority, uxTopReadyPriority);\
+	listGET_OWNER_OF_NEXT_ENTRY(pxCurrentTCB, &(pxReadyTasksLists[uxTopPriority]));\
+	}
+#if 0
+	#define taskRESET_READY_PRIORITY(uxPriority){\
+	if(listCURRENT_LIST_LENGTH(&(pxReadyTasksLists[uxPriority])) == (UBaseType_t)0){\
+	portRESET_READY_PRIORITY((uxPriority), (uxTopReadyPriority));\
+	}\
+	}
+#else
+	#define taskRESET_READY_PRIORITY(uxPriority){\
+	portRESET_READY_PRIORITY((uxPriority), (uxTopReadyPriority));\
+	}
+#endif
+#endif
+
 static void prvInitialiseNewTask(TaskFunction_t pxTaskCode,
 										 const char* const pcName,
 										 const uint32_t ulStackDepth,
 										 void* const pvParameters,
+										 UBaseType_t uxPriority,
 										 TaskHandle_t* const pxCreateTask,
 										 TCB_t* pxNewTCB)
 {
@@ -77,6 +131,12 @@ static void prvInitialiseNewTask(TaskFunction_t pxTaskCode,
 	// 設置此任務節點的擁有者
 	listSET_LIST_ITEM_OWNER(&(pxNewTCB->xStateListItem), pxNewTCB);
 	
+	// 初始化何防呆	priority
+	if(uxPriority >= (UBaseType_t)configMAX_PRIORITIES){
+		uxPriority = (UBaseType_t)configMAX_PRIORITIES - (UBaseType_t)1U;
+	}
+	pxNewTCB->uxPriority = uxPriority;
+	
 	pxNewTCB->pxTopOfStack = pxPortInitialiseStack(pxTopOfStack,
 																								pxTaskCode,
 																								pvParameters);
@@ -91,7 +151,7 @@ void prvInitialiseTaskLists(void){
 	UBaseType_t uxPriority;
 	
 	for(uxPriority = (UBaseType_t)0U;uxPriority < (UBaseType_t)configMAX_PRIORITIES;uxPriority++){
-		vListInitialize(&pxReadyTaskLists[uxPriority]);
+		vListInitialize(&(pxReadyTasksLists[uxPriority]));
 	}
 }
 
@@ -129,9 +189,10 @@ void vTaskStartScheduler(void){
 																			(char*)"IDLE",
 																			(uint32_t)ulIdleTaskStackSize,
 																			(void*)NULL,
+																			(UBaseType_t) tskIDLE_PRIORITY,
 																			(StackType_t*)pxIdleTaskStackBuffer,
 																			(TCB_t*)pxIdleTaskTCBBuffer);
-	vListInsertEnd(&(pxReadyTaskLists[0]), &(((TCB_t*)pxIdleTaskTCBBuffer)->xStateListItem));
+	vListInsertEnd(&(pxReadyTasksLists[0]), &(((TCB_t*)pxIdleTaskTCBBuffer)->xStateListItem));
 	/* ==== 創建 IdleTask end ==== */
 																			
 	pxCurrentTCB = &Task1TCB;
@@ -140,13 +201,40 @@ void vTaskStartScheduler(void){
 	}
 }
 
-#if 0
-void vTaskSwitchContext(void){
-	if(pxCurrentTCB == &Task1TCB){
-		pxCurrentTCB = &Task2TCB;
-	}else{
-		pxCurrentTCB = &Task1TCB;
+// 一次替代兩行程式碼~
+#define prvAddTaskToReadyList(pxTCB)\
+				taskRECORD_READY_PRIORITY((pxTCB)->uxPriority);\
+				vListInsertEnd(&(pxReadyTasksLists[(pxTCB)->uxPriority]), &((pxTCB)->xStateListItem));
+
+// 將新建 task 放入 ReadyList
+static void prvAddNewTaskToReadyList(TCB_t* pxNewTCB){
+	taskENTER_CRITICAL();
+	{
+		uxCurrentNumberOfTasks++;
+		
+		if(pxCurrentTCB == NULL){
+			pxCurrentTCB = pxNewTCB;
+			
+			if(uxCurrentNumberOfTasks == (UBaseType_t)1){
+				prvInitialiseTaskLists();
+			}
+		}else{
+			if(pxCurrentTCB->uxPriority <= pxNewTCB->uxPriority){
+				pxCurrentTCB = pxNewTCB;
+			}
+		}
+		
+		prvAddTaskToReadyList(pxNewTCB);
+		
 	}
+	taskEXIT_CRITICAL();
+}
+
+
+
+#if 1
+void vTaskSwitchContext(void){
+	taskSELECT_HIGHEST_PRIORITY_TASK();
 }
 #else
 void vTaskSwitchContext(void){
@@ -188,6 +276,11 @@ void vTaskDelay(const TickType_t xTicksToDelay){
 	TCB_t* pxTCB = NULL;
 	pxTCB = pxCurrentTCB;
 	pxTCB->xTicksToDelay = xTicksToDelay;
+	
+	// 將任務從就緒列表中移除
+	// uxListRemove(&(pxTCB->xStateListItem));
+	taskRESET_READY_PRIORITY(pxTCB->uxPriority);
+	
 	/* 任務切換 */
 	taskYIELD();
 }
@@ -202,10 +295,14 @@ void xTaskIncrementTick(void){
 	
 	// 掃描就緒列表中所有任務的xTickToDelay，如果不為0，則-1
 	for(i=0; i<configMAX_PRIORITIES; i++){
-        if( listLIST_IS_EMPTY( &(pxReadyTaskLists[i]) ) == pdFALSE ){
-            pxTCB = (TCB_t*)(listGET_HEAD_ENTRY((&pxReadyTaskLists[i]))->pvOwner);
+        if( listLIST_IS_EMPTY( &(pxReadyTasksLists[i]) ) == pdFALSE ){
+            pxTCB = (TCB_t*)(listGET_HEAD_ENTRY((&pxReadyTasksLists[i]))->pvOwner);
             if(pxTCB->xTicksToDelay > 0){
                 pxTCB->xTicksToDelay--;
+							
+								if(pxTCB->xTicksToDelay == 0){  // 若沒有Delay 讓他進入排程
+									taskRECORD_READY_PRIORITY(pxTCB->uxPriority);
+								}
             }
         }
     }

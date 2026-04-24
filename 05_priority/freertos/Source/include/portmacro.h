@@ -92,10 +92,20 @@ static portFORCE_INLINE void vPortSetBASEPRI(uint32_t ulBASEPRI){
 }
 
 // 定義進出critical_section
+void vPortEnterCritical(void); // 要先宣告！ 因為它是後面才實現的！
+void vPortExitCritical(void);  // 要先宣告！ 因為它是後面才實現的！
 #define portENTER_CRITICAL()		vPortEnterCritical()
 #define portEXIT_CRITICAL()			vPortExitCritical()
 
 // IdleTask 移植性定義函數
 #define portTASK_FUNCTION(vFunction, pvParameters) void vFunction(void *pvParameters)
+
+// 多優先級 ( 優化方法用 )
+#define portRECORD_READY_PRIORITY(uxPriority, uxReadyPriorities)\
+				(uxReadyPriorities) |= (1UL << (uxPriority))
+#define portRESET_READY_PRIORITY(uxPriority, uxReadyPriorities)\
+				(uxReadyPriorities) &= ~(1UL << (uxPriority))
+#define portGET_HIGHEST_PRIORITY(uxTopPriority, uxReadyPriorities)\
+				(uxTopPriority) = (31UL - (uint32_t) __builtin_clz((uxReadyPriorities)))
 
 #endif /* PORTMACRO_H */
