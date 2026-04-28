@@ -57,12 +57,13 @@ typedef struct xLIST{
 	} \
 	(pxTCB) = (pxConstList)->pxIndex->pvOwner; \
 }
+#define listGET_OWNER_OF_HEAD_ENTRY(pxList) (pxList)->xListEnd->pxNext->pvOwner
 
 /* prototypes 原型 */
 void vListInitialize(List_t* const pxList);
 void vListInitializeItem(ListItem_t* const pxItem);
 void vListInsert(List_t* const pxList, ListItem_t* const pxItem);
 void vListInsertEnd(List_t* const pxList, ListItem_t* const pxItem);
-UBaseType_t vListRemove(ListItem_t* const pxItemToRemove);
+UBaseType_t uxListRemove(ListItem_t* const pxItemToRemove);
 
 #endif /* LIST_H */

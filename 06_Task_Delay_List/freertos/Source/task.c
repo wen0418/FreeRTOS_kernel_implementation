@@ -1,18 +1,40 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-// 初始化 CurrentTCB
+// 定義 CurrentTCB
 TCB_t* volatile pxCurrentTCB = NULL;
 // 任務就緒列表
 List_t pxReadyTasksLists[configMAX_PRIORITIES];
 
-// 初始化 IdleTaskHandler
+// 定義 IdleTaskHandler
 static TaskHandle_t xIdleTaskHandle = NULL;
 // xTickCount全域變數宣告
 TickType_t xTickCount;
 
-// 初始化任務數
+// 定義任務數
 static UBaseType_t uxCurrentNumberOfTasks = 0;
+
+// 定義 task delay 相關 List
+static List_t xDelayedTaskList1;
+static List_t xDelayedTaskList2;
+static List_t *volatile pxDelayedTaskList;
+static List_t *volatile pxOverflowDelayedTaskList;
+
+// 定義 NextTaskUnblockTime
+UBaseType_t xNextTaskUnblockTime = 0;
+
+// 定義prvresetnextTaskUnblockTime
+static void prvResetNextTaskUnblockTime(void);
+
+// 定義溢位時如何交換兩DelayedList
+#define taskSWITCH_DELAYED_LISTS(){\
+	List_t* pxTemp;\
+	pxTemp = pxDelayedTaskList;\
+	pxDelayedTaskList = pxOverflowDelayedTaskList;\
+	pxOverflowDelayedTaskList = pxTemp;\
+	xNumOfOverflows++;\
+	prvResetNextTaskUnblockTime();\
+}
 
 static void prvInitialiseNewTask(TaskFunction_t pxTaskCode,
 																 const char * const pcName,
@@ -94,9 +116,17 @@ static volatile UBaseType_t uxTopReadyPriority = tskIDLE_PRIORITY;
 	}\
 	}
 #else
+#if 1
 	#define taskRESET_READY_PRIORITY(uxPriority){\
-	portRESET_READY_PRIORITY((uxPriority), (uxTopReadyPriority));\
+		if(listCURRENT_LIST_LENGTH(&(pxReadyTasksLists[(uxPriority)])) == (UBaseType_t)0){\
+			portRESET_READY_PRIORITY((uxPriority), (uxTopReadyPriority));\
+		}\
 	}
+#else
+	#define taskRESET_READY_PRIORITY(uxPriority){\
+		portRESET_READY_PRIORITY((uxPriority), (uxTopReadyPriority));\
+	}
+#endif
 #endif
 #endif
 
@@ -153,6 +183,11 @@ void prvInitialiseTaskLists(void){
 	for(uxPriority = (UBaseType_t)0U;uxPriority < (UBaseType_t)configMAX_PRIORITIES;uxPriority++){
 		vListInitialize(&(pxReadyTasksLists[uxPriority]));
 	}
+	
+	vListInitialize(&xDelayedTaskList1);
+	vListInitialize(&xDelayedTaskList2);
+	pxDelayedTaskList = &xDelayedTaskList1;
+	pxOverflowDelayedTaskList = &xDelayedTaskList2;
 }
 
 extern TCB_t Task1TCB;
@@ -194,8 +229,11 @@ void vTaskStartScheduler(void){
 																			(TCB_t*)pxIdleTaskTCBBuffer);
 	vListInsertEnd(&(pxReadyTasksLists[0]), &(((TCB_t*)pxIdleTaskTCBBuffer)->xStateListItem));
 	/* ==== 創建 IdleTask end ==== */
+													
+	xNextTaskUnblockTime = portMAX_DELAY;
+	xTickCount = (TickType_t) 0U;
 																			
-	pxCurrentTCB = &Task1TCB;
+	pxCurrentTCB = &Task1TCB; // 可能要改 注意一下
 	if(xPortStartScheduler()!=pdFALSE){
 		// 若調動啟動成功，即不會來到這裡
 	}
@@ -271,11 +309,34 @@ void vTaskSwitchContext(void){
 }
 #endif
 
+static void prvAddCurrentTaskToDelayedList(TickType_t xTicksToWait){
+	TickType_t xTimeToWake;
+	const TickType_t xConstTickCount = xTickCount;
+	
+	if(uxListRemove(&(pxCurrentTCB->xStateListItem)) == (UBaseType_t)0){
+		portRESET_READY_PRIORITY(pxCurrentTCB->uxPriority, uxTopReadyPriority);
+	}
+	
+	xTimeToWake = xConstTickCount + xTicksToWait;
+	listSET_LIST_ITEM_VALUE(&(pxCurrentTCB->xStateListItem), xTimeToWake); // ListItem的Value就是task下次醒來的時間 不是task的優先級(跟ucosii不同)
+	
+	/* 溢出 */
+	if(xTimeToWake < xConstTickCount){ // 代表加起來的數字有問題ㄌ
+		vListInsert(pxOverflowDelayedTaskList, &(pxCurrentTCB->xStateListItem));  // 屆時等TickCount重製 pxOverflowDelayedTaskList就會和現在的DelayedTaskList互換
+	}else{ /* 沒有溢出 */
+		vListInsert(pxDelayedTaskList, &(pxCurrentTCB->xStateListItem));
+		if(xTimeToWake < xNextTaskUnblockTime){
+			xNextTaskUnblockTime = xTimeToWake;
+		}
+	}
+}
+
 // delay
 void vTaskDelay(const TickType_t xTicksToDelay){
 	TCB_t* pxTCB = NULL;
 	pxTCB = pxCurrentTCB;
-	pxTCB->xTicksToDelay = xTicksToDelay;
+	// pxTCB->xTicksToDelay = xTicksToDelay;
+	prvAddCurrentTaskToDelayedList(xTicksToDelay);
 	
 	// 將任務從就緒列表中移除
 	// uxListRemove(&(pxTCB->xStateListItem));
@@ -287,24 +348,45 @@ void vTaskDelay(const TickType_t xTicksToDelay){
 
 void xTaskIncrementTick(void){
 	TCB_t *pxTCB = NULL;
-	BaseType_t i = 0;
+	TickType_t xItemValue;
 	
 	// 更新系統計時器 xTickCount
 	const TickType_t xConstTickCount = xTickCount + 1;
 	xTickCount = xConstTickCount;
 	
 	// 掃描就緒列表中所有任務的xTickToDelay，如果不為0，則-1
-	for(i=0; i<configMAX_PRIORITIES; i++){
-        if( listLIST_IS_EMPTY( &(pxReadyTasksLists[i]) ) == pdFALSE ){
-            pxTCB = (TCB_t*)(listGET_HEAD_ENTRY((&pxReadyTasksLists[i]))->pvOwner);
-            if(pxTCB->xTicksToDelay > 0){
-                pxTCB->xTicksToDelay--;
-							
-								if(pxTCB->xTicksToDelay == 0){  // 若沒有Delay 讓他進入排程
-									taskRECORD_READY_PRIORITY(pxTCB->uxPriority);
-								}
-            }
-        }
-    }
+	if(xConstTickCount == (TickType_t)0U){
+		taskSWITCH_DELAYED_LISTS();
+	}
+	
+	if(xConstTickCount >= xNextTaskUnblockTime){
+		for(;;){
+			if(listLIST_IS_EMPTY(pxDelayedTaskList) != pdFALSE){
+				xNextTaskUnblockTime = portMAX_DELAY;
+				break;
+			}else{
+				pxTCB = (TCB_t*)listGET_OWNER_OF_HEAD_ENTRY(pxDelayedTaskList); // 注意一下
+				xItemValue = listGET_LIST_ITEM_VALUE(&(pxTCB->xStateListItem));
+				
+				if(xConstTickCount < xItemValue){
+					xNextTaskUnblockTime = xItemValue;
+					break;
+				}
+				
+				(void) uxListRemove(&(pxTCB->xStateListItem));
+				prvAddTaskToReadyList(pxTCB);
+			}
+		}
+	}
 	portYIELD();
+}
+
+static void prvResetNextTaskUnblockTime(void){
+	TCB_t* pxTCB;
+	if(listLIST_IS_EMPTY(pxDelayedTaskList)!=pdFALSE){
+		xNextTaskUnblockTime = portMAX_DELAY;
+	}else{
+		(pxTCB) = (TCB_t*)listGET_OWNER_OF_HEAD_ENTRY(pxDelayedTaskList);
+		xNextTaskUnblockTime = listGET_LIST_ITEM_VALUE(&((pxTCB)->xStateListItem));
+	}
 }
