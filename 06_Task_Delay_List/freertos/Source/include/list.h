@@ -57,7 +57,7 @@ typedef struct xLIST{
 	} \
 	(pxTCB) = (pxConstList)->pxIndex->pvOwner; \
 }
-#define listGET_OWNER_OF_HEAD_ENTRY(pxList) (pxList)->xListEnd->pxNext->pvOwner
+#define listGET_OWNER_OF_HEAD_ENTRY(pxList) ((&((pxList)->xListEnd))->pxNext)->pvOwner
 
 /* prototypes 原型 */
 void vListInitialize(List_t* const pxList);

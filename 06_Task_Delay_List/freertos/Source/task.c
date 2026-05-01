@@ -27,6 +27,7 @@ UBaseType_t xNextTaskUnblockTime = 0;
 static void prvResetNextTaskUnblockTime(void);
 
 // 定義溢位時如何交換兩DelayedList
+BaseType_t xNumOfOverflows = 0;
 #define taskSWITCH_DELAYED_LISTS(){\
 	List_t* pxTemp;\
 	pxTemp = pxDelayedTaskList;\
@@ -233,7 +234,7 @@ void vTaskStartScheduler(void){
 	xNextTaskUnblockTime = portMAX_DELAY;
 	xTickCount = (TickType_t) 0U;
 																			
-	pxCurrentTCB = &Task1TCB; // 可能要改 注意一下
+	// pxCurrentTCB = &Task1TCB;
 	if(xPortStartScheduler()!=pdFALSE){
 		// 若調動啟動成功，即不會來到這裡
 	}

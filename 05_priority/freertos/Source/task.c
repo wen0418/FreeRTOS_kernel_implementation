@@ -195,7 +195,7 @@ void vTaskStartScheduler(void){
 	vListInsertEnd(&(pxReadyTasksLists[0]), &(((TCB_t*)pxIdleTaskTCBBuffer)->xStateListItem));
 	/* ==== 創建 IdleTask end ==== */
 																			
-	pxCurrentTCB = &Task1TCB;
+	// pxCurrentTCB = &Task1TCB;
 	if(xPortStartScheduler()!=pdFALSE){
 		// 若調動啟動成功，即不會來到這裡
 	}

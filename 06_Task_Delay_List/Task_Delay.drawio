@@ -1,0 +1,73 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="t8O05QOpf1Y4Zu8PXZFG">
+    <mxGraphModel dx="1030" dy="596" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="pxDelayedTaskList" vertex="1">
+          <mxGeometry height="80" width="230" x="360" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;pxOverflowDelayedTaskList&lt;/span&gt;" vertex="1">
+          <mxGeometry height="80" width="230" x="360" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-5" edge="1" parent="1" source="wTcpa_3gEvtQlsD2OvnH-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="wTcpa_3gEvtQlsD2OvnH-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-6" edge="1" parent="1" source="wTcpa_3gEvtQlsD2OvnH-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="wTcpa_3gEvtQlsD2OvnH-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="在 prvInitialiseTaskLists()&lt;div&gt;初始化兩個新的 DelayedTaskList&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="250" x="70" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="Task 現在的生命週期" vertex="1">
+          <mxGeometry height="70" width="520" x="70" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-10" edge="1" parent="1" source="wTcpa_3gEvtQlsD2OvnH-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="wTcpa_3gEvtQlsD2OvnH-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="Task Create" vertex="1">
+          <mxGeometry height="70" width="130" x="70" y="515" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-13" edge="1" parent="1" source="wTcpa_3gEvtQlsD2OvnH-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="wTcpa_3gEvtQlsD2OvnH-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="進入 ReadyTasksLists" vertex="1">
+          <mxGeometry height="70" width="200" x="230" y="515" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-14" edge="1" parent="1" source="wTcpa_3gEvtQlsD2OvnH-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="wTcpa_3gEvtQlsD2OvnH-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="被 scheduler 選定排程" vertex="1">
+          <mxGeometry height="70" width="200" x="460" y="515" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-16" edge="1" parent="1" source="wTcpa_3gEvtQlsD2OvnH-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="wTcpa_3gEvtQlsD2OvnH-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="執行任務" vertex="1">
+          <mxGeometry height="70" width="130" x="690" y="515" as="geometry" />
+        </mxCell>
+        <mxCell id="QT6N9FpCE0Gic_vrRNaN-2" edge="1" parent="1" source="wTcpa_3gEvtQlsD2OvnH-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="QT6N9FpCE0Gic_vrRNaN-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;strokeColor=light-dark(#000000,#1C43C8);" value="進入 Delay&lt;div&gt;( vTaskDelay() )&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="130" x="690" y="614" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-19" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;strokeColor=#001DBC;fillColor=light-dark(#000000,#1C49A3);fontColor=light-dark(#FFFFFF,#FFFFFF);" value="CH09 新增/修改流程" vertex="1">
+          <mxGeometry height="35" width="160" x="860" y="585" as="geometry" />
+        </mxCell>
+        <mxCell id="wTcpa_3gEvtQlsD2OvnH-20" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;" value="CH05 過去流程" vertex="1">
+          <mxGeometry height="30" width="160" x="860" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="QT6N9FpCE0Gic_vrRNaN-4" edge="1" parent="1" source="QT6N9FpCE0Gic_vrRNaN-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="QT6N9FpCE0Gic_vrRNaN-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="QT6N9FpCE0Gic_vrRNaN-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;strokeColor=light-dark(#000000,#1C43C8);" value="prvAddCurrentTaskToDelayedList()" vertex="1">
+          <mxGeometry height="70" width="310" x="350" y="614" as="geometry" />
+        </mxCell>
+        <mxCell id="QT6N9FpCE0Gic_vrRNaN-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;strokeColor=light-dark(#000000,#1C43C8);arcSize=9;" value="1. 將任務從 ReadyTasksLists 移除&lt;div&gt;2. 移除 uxTopReadyPriority 對應 priority bit&lt;/div&gt;&lt;div&gt;3. 設定 ListItemValue&lt;/div&gt;&lt;div&gt;4. 將 Task 放入 pxDelayedTaskList 或 pxOverflowDelayedTaskList&lt;br&gt;&lt;/div&gt;&lt;div&gt;5. 更新 xNextTaskUnblockTime&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="310" x="350" y="700" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
